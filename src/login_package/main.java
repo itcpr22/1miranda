@@ -26,6 +26,7 @@ public class main extends javax.swing.JFrame {
      */
     public main() {
         initComponents();
+         refresh();
     }
     
       public main(String fname) {
@@ -33,8 +34,12 @@ public class main extends javax.swing.JFrame {
         hn.setText("Welcome "+fname);
         this.setLocationRelativeTo(null);
       }
+      
      product product_pobj = new product();
     conn con = new conn();
+    
+      Object id = null;
+      
      void clearAddProductFields(){
         prn.setText(null);
         quan.setValue(0);
@@ -81,6 +86,7 @@ public class main extends javax.swing.JFrame {
         pri = new javax.swing.JFormattedTextField();
         jSeparator1 = new javax.swing.JSeparator();
         ad_btn = new javax.swing.JButton();
+        sa_btn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         hn = new javax.swing.JLabel();
@@ -91,6 +97,7 @@ public class main extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         my_dialog.setMaximumSize(new java.awt.Dimension(465, 332));
         my_dialog.setMinimumSize(new java.awt.Dimension(465, 332));
@@ -121,6 +128,14 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        sa_btn.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        sa_btn.setText("SAVE");
+        sa_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sa_btnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -146,6 +161,8 @@ public class main extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(ad_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(sa_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -166,7 +183,9 @@ public class main extends javax.swing.JFrame {
                 .addGap(34, 34, 34)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(ad_btn)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ad_btn)
+                    .addComponent(sa_btn))
                 .addGap(63, 63, 63))
         );
 
@@ -274,6 +293,14 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jButton4.setText("EDIT PRODUCT");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -285,7 +312,8 @@ public class main extends javax.swing.JFrame {
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -295,7 +323,9 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addContainerGap())
         );
@@ -361,6 +391,7 @@ public class main extends javax.swing.JFrame {
         my_dialog.setLocationRelativeTo(rootPane);
         my_dialog.setAlwaysOnTop(true);
         ad_btn.setVisible(true);
+        sa_btn.setVisible(false);
         quan.setEnabled(true);
         
         this.clearAddProductFields();
@@ -410,6 +441,46 @@ System.exit(0);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        int table_row = mine.getSelectedRow();
+        
+        if(table_row != -1){
+        id = mine.getValueAt(table_row, 0);
+        Object product_name = mine.getValueAt(table_row, 1);
+        Object pro_qty = mine.getValueAt(table_row, 2);
+        Object pro_price = mine.getValueAt(table_row, 3);
+        
+        prn.setText((String) product_name);
+        quan.setValue(Integer.valueOf((String) pro_qty));
+        pri.setValue(Double.valueOf((String) pro_price));
+        
+        my_dialog.setVisible(true);
+        my_dialog.setLocationRelativeTo(rootPane);
+        my_dialog.setAlwaysOnTop(true);
+        ad_btn.setVisible(false);
+        sa_btn.setVisible(true);
+        quan.setEnabled(false);
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Please Select a product", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+// TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void sa_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sa_btnActionPerformed
+        String newpn = prn.getText();
+        Object newpr = pri.getValue();
+
+        int be = product_pobj.editProduct(id, newpn, newpr);
+        if(be==1){
+            JOptionPane.showMessageDialog(my_dialog, "Product Edit Completely");
+            my_dialog.setVisible(false);
+            this.refresh();
+        }else{
+            JOptionPane.showMessageDialog(my_dialog, "Problem Editing Product", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sa_btnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -451,6 +522,7 @@ System.exit(0);
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -467,5 +539,6 @@ System.exit(0);
     private javax.swing.JFormattedTextField pri;
     private javax.swing.JTextField prn;
     private javax.swing.JSpinner quan;
+    private javax.swing.JButton sa_btn;
     // End of variables declaration//GEN-END:variables
 }
