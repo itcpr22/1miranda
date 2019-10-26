@@ -44,4 +44,30 @@ public class product {
         }
         return be;
     }
+      
+    public int deleteProduct(Object Product_ID){
+        int be = 0;
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = (Connection) DriverManager.getConnection(con.url,con.username,con.password);
+            
+            String sql = "DELETE FROM product WHERE Product_ID = ?;";
+            PreparedStatement pstmt = (PreparedStatement) conn.prepareStatement(sql);
+            
+            int newid = Integer.parseInt(Product_ID.toString());
+            pstmt.setInt(1, newid);
+            
+            be = pstmt.executeUpdate();
+            //System.out.println(pstmt);
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return be;
+    }
+
 }
