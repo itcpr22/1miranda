@@ -94,5 +94,8 @@ public class product {
         }
         return be;
     }
+    int addQuantity(Object id, Object qn) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
 
 }

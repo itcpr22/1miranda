@@ -63,7 +63,7 @@ class reg_class {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = (Connection) DriverManager.getConnection(con.url, con.username, con.password);
         
-            String sql = "SELECT username FROM `login` WHERE  username= ?;";
+            String sql = "SELECT USERNAME FROM `register` WHERE  USERNAME= ?;";
             PreparedStatement pstmt = (PreparedStatement) conn.prepareStatement(sql);
         
             pstmt.setString(1, username);

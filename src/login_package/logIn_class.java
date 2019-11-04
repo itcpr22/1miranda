@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Home
  */
-class logIn_class {
+public class logIn_class {
      conn con = new conn();
     String username = "";
      String password = "";
@@ -24,7 +24,7 @@ class logIn_class {
     public int login(String USERNAME, String PASSWORD){
          
         int x = 0;
-        
+    
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = (Connection) DriverManager.getConnection(con.url,con.username,con.password);
@@ -38,7 +38,7 @@ class logIn_class {
             ResultSet rs = pstmt.executeQuery();
             
             if(rs.next()){
-                username = rs.getString("username");
+                username = rs.getString("USERNAME");
                 x = 1;
             }else{
                 x = 0;
