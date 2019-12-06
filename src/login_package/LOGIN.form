@@ -97,10 +97,8 @@
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                   <Component id="j" pref="168" max="32767" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="cp" pref="168" max="32767" attributes="0"/>
-                                                      <Component id="pa" max="32767" attributes="0"/>
-                                                  </Group>
+                                                  <Component id="cp" pref="168" max="32767" attributes="0"/>
+                                                  <Component id="pa" max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
                                       </Group>
