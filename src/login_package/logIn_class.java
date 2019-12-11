@@ -17,10 +17,9 @@ import java.util.logging.Logger;
  */
 public class logIn_class {
      conn con = new conn();
-    String username = "";
+        String username = "";
      String password = "";
-    
-    
+     
     public int login(String USERNAME, String PASSWORD){
          
         int x = 0;
@@ -38,12 +37,11 @@ public class logIn_class {
             ResultSet rs = pstmt.executeQuery();
             
             if(rs.next()){
-                username = rs.getString("USERNAME");
+               username = rs.getString("USERNAME");
                 x = 1;
             }else{
                 x = 0;
             }
-            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(logIn_class.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

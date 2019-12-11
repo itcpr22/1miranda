@@ -8,6 +8,11 @@ package login_package;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
+import java.awt.AWTException;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,6 +34,7 @@ public class main extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         refreshThread.start();
+        checkLowQty.start();
     }
     
       public main(String fname) {
@@ -36,6 +42,7 @@ public class main extends javax.swing.JFrame {
         hn.setText("Welcome "+fname);
         this.setLocationRelativeTo(null);
          refreshThread.start();
+         checkLowQty.start();
       }
       
      product product_pobj = new product();
@@ -63,7 +70,6 @@ public class main extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) mine.getModel();
             model.setRowCount(0);
             while(rs.next()){
-                int qty = Integer.parseInt(rs.getString("Quantity"));
                 model.addRow(new Object[]{rs.getString("Product_ID"),rs.getString("Product_name"),rs.getString("Quantity"),rs.getString("Price")});
             }
               
@@ -87,7 +93,65 @@ public class main extends javax.swing.JFrame {
             }
             
         }
-    });  
+    }); 
+    final void checkLowQuantity(){
+        Notification n = new Notification();
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = (Connection) DriverManager.getConnection(con.url,con.username,con.password);
+            
+            String sql = "select * from product;";
+            String status_sql = "UPDATE product SET Status=? WHERE Product_ID=?;";
+            Statement stmt = (Statement) conn.createStatement();
+            
+            PreparedStatement pstmt = (PreparedStatement) conn.prepareStatement(status_sql);
+            
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            while(rs.next()){
+                String Product_ID = rs.getString("Product_ID");
+                int qty = Integer.parseInt(rs.getString("Quantity"));
+                int Status = rs.getInt("Status");
+                String product = rs.getString("Product_name");
+                
+                if (qty < 5 &&  Status != 1){
+                    pstmt.setInt(1, 1);
+                    pstmt.setString(2, Product_ID);
+                    pstmt.executeUpdate();
+                    n.displayNotification(product);
+                }else if(qty > 5 &&  Status == 1){
+                    
+                    pstmt.setInt(1, 2);
+                    pstmt.setString(2, Product_ID);
+                    pstmt.executeUpdate();
+                
+                }
+            }
+                
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AWTException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    Thread checkLowQty = new Thread(new Runnable(){
+        
+        @Override
+        public void run(){
+            try{
+                while(true){
+                    checkLowQuantity();
+                    Thread.sleep(5000);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    });
+    
         final void search(String keyword){
         
         try{
@@ -118,6 +182,24 @@ public class main extends javax.swing.JFrame {
         quan.setEnabled(true);
         pri.setEnabled(true);
         clearAddProductFields();
+    }
+     class Notification{
+    
+        void displayNotification(String product) throws AWTException{
+        
+        SystemTray tray = SystemTray.getSystemTray();
+        
+        Image image = Toolkit.getDefaultToolkit().createImage("img/1.png");
+        
+        TrayIcon trayIcon = new TrayIcon(image,"Tray Icon"); 
+        
+        trayIcon.setImageAutoSize(true);
+        tray.add(trayIcon);
+        
+        trayIcon.displayMessage("LOW QUANTITY", product+" Product Low on Quantity", TrayIcon.MessageType.WARNING);
+        
+        }
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -316,7 +398,7 @@ public class main extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
-        jPanel2.setBackground(new java.awt.Color(102, 0, 102));
+        jPanel2.setBackground(new java.awt.Color(0, 153, 153));
 
         jPanel3.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -458,7 +540,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(sa, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(se, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                .addComponent(se)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -479,17 +561,15 @@ public class main extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(249, 249, 249))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(249, 249, 249))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -504,7 +584,7 @@ public class main extends javax.swing.JFrame {
         );
 
         hn.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        hn.setText("WELCOME TO MY ACTIVITY :)");
+        hn.setText("     WELCOME TO MY ACTIVITY :)");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
